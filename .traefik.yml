@@ -1,0 +1,6 @@
+displayName: Fix RadosGW
+type: middleware
+import: github.com/ananace/traefik-fix-rgw
+summary: Fix the handling of tilde on RadosGW request
+testData: #no test data needed
+  unused: var

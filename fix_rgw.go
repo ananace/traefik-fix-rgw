@@ -31,9 +31,16 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 }
 
 func (a *FixRGW) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-	if strings.Contains(req.URL.Path, "%7E") || strings.Contains(req.URL.Path, "%7e") {
-		req.URL.Path = strings.ReplaceAll(req.URL.Path, "%7E", "~")
-		req.URL.Path = strings.ReplaceAll(req.URL.Path, "%7e", "~")
-	}
+	req.URL.Path = fixTildes(req.URL.Path)
+	req.URL.RawQuery = fixTildes(req.URL.RawQuery)
+
 	a.next.ServeHTTP(rw, req)
+}
+
+func fixTildes(str string) (string) {
+	if strings.Contains(str, "%7E") || strings.Contains(str, "%7e") {
+		str = strings.ReplaceAll(str, "%7E", "~")
+		str = strings.ReplaceAll(str, "%7e", "~")
+	}
+	return str
 }

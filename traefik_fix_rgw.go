@@ -1,4 +1,4 @@
-package fix_rgw
+package traefik_fix_rgw
 
 import (
   "context"
@@ -12,8 +12,7 @@ type Config struct {
 
 // CreateConfig creates the default plugin configuration.
 func CreateConfig() *Config {
-	return &Config{
-	}
+	return &Config{}
 }
 
 // WebsitePathConverter a WebsitePathConverter plugin.
@@ -31,7 +30,7 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 }
 
 func (a *FixRGW) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-	req.URL.Path = fixTildes(req.URL.Path)
+	req.URL.RawPath = fixTildes(req.URL.RawPath)
 	req.URL.RawQuery = fixTildes(req.URL.RawQuery)
 
 	a.next.ServeHTTP(rw, req)
